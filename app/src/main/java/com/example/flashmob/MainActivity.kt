@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,33 +26,37 @@ import com.example.flashmob.ui.theme.green
 import kotlin.properties.ObservableProperty
 
 class MainActivity : ComponentActivity() {
-
-    var curr = 2f
-
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             FlashMobTheme {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(darkGray),
-                    contentAlignment = Alignment.Center
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(darkGray),
+                    contentAlignment = Alignment.Center,
                 ) {
 
-                    CustomCircularProgressIndicator(
-                        initialValue= 50,
-                        primaryColor= green,
-                        secondaryColor= Color.Yellow,
-                        circleRadius = 250f,
-                        onPositionChange = { position ->
-                            //Do something with position
+                    Column(
+                        modifier =  Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement =  Arrangement.SpaceEvenly) {
+                        CustomCircularProgressIndicator(
+                            initialValue = 50,
+                            primaryColor = green,
+                            secondaryColor = Color.Yellow,
+                            circleRadius = 250f,
+                            onPositionChange = { position ->
+                                //Do something with position
 
-                        },
-                        modifier = Modifier
-                            .size(250.dp)
-                            .background(darkGray)
-                    )
+                            },
+                            modifier = Modifier
+                                .size(250.dp)
+                                .background(darkGray)
+                        )
+
+                        RoundedCornerButton()
+                    }
                 }
 
             }
