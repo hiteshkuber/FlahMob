@@ -1,6 +1,5 @@
-package com.example.flashmob
+package com.example.flashmob.ui.theme.composables
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,15 +14,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.flashmob.ui.theme.darkGray
 
 @Composable
-fun RoundedCornerButton() {
+fun RoundedCornerButton(
+    onButtonToggle: (Boolean) -> Unit
+) {
 
     var isOn by remember { mutableStateOf(false) }
 
@@ -31,7 +30,10 @@ fun RoundedCornerButton() {
     val buttonColor = if (isOn) Color.Green else Color.Yellow
 
     Button(
-        onClick = { isOn = !isOn },
+        onClick = {
+            isOn = !isOn
+            onButtonToggle(isOn)
+        },
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
@@ -54,5 +56,5 @@ fun RoundedCornerButton() {
 @Preview
 @Composable
 fun App() {
-    RoundedCornerButton()
+//    RoundedCornerButton()
 }
