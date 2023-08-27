@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class MyViewModel() : ViewModel() {
     private val _isOn = MutableLiveData<Boolean>(false)
     private val _discoOn = MutableLiveData<Boolean>(false)
-    private val _speed = MutableLiveData<Long>(1000)
+    private val _speed = MutableLiveData<Long>(250)
     val isOn: LiveData<Boolean>
         get() = _isOn
     val discoOn: LiveData<Boolean>
