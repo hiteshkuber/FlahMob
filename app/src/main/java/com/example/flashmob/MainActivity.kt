@@ -15,10 +15,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.flashmob.ui.theme.FlashMobTheme
 import com.example.flashmob.ui.theme.MyViewModel
@@ -34,7 +36,7 @@ class MainActivity : ComponentActivity() {
     private var mCameraManager: CameraManager? = null
     private var mCameraId: String? = null
     private val handler = Handler(Looper.getMainLooper())
-    private var flashDuration: Long = 800
+    private var flashDuration: Long = 500
 
     private val flashRunnable = object : Runnable {
         override fun run() {
@@ -60,6 +62,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FlashMobTheme {
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -78,10 +81,12 @@ class MainActivity : ComponentActivity() {
                             secondaryColor = Color.Yellow,
                             circleRadius = 250f,
                             onPositionChange = { position ->
+                                handler.removeCallbacks(flashRunnable)
                                 if(position != 0) {
-                                    myViewModel?.updateSpeed(flashDuration - position*10)
+                                    myViewModel?.updateSpeed(flashDuration - position*5 + 1)
                                     handler.post(flashRunnable)
                                 } else {
+                                    myViewModel?.updateSpeed(0)
                                     switchFlashLight(myViewModel?.isOn?.value?:false)
                                 }
                             },
@@ -93,12 +98,15 @@ class MainActivity : ComponentActivity() {
                         RoundedCornerButton(
                             onButtonToggle = { value ->
                                 myViewModel?.updateTorchState(value)
+                                handler.removeCallbacks(flashRunnable)
                                 switchFlashLight(value)
 
-                                myViewModel!!.speed.value?.let {
-                                    if(it.toInt() != 0) {
-                                        myViewModel?.updateSpeed(flashDuration - it*9)
-                                        handler.post(flashRunnable)
+                                if(value) {
+                                    myViewModel!!.speed.value?.let {
+                                        if (it.toInt() != 0) {
+                                            myViewModel?.updateSpeed(it)
+                                            handler.post(flashRunnable)
+                                        }
                                     }
                                 }
                             }
@@ -116,6 +124,11 @@ class MainActivity : ComponentActivity() {
         } catch (e: CameraAccessException) {
             e.printStackTrace()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(flashRunnable)
     }
 
     fun toggleFlashLight() {

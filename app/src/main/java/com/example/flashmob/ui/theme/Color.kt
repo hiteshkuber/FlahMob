@@ -28,3 +28,5 @@ val redOrange = Color(0xFFe84a23)
 val green = Color(0xFF0ddb25)
 val blue = Color(0xFF140ddb)
 val brightBlue = Color(0xFF027cf5)
+
+val transparent = Color(0x80000000)
